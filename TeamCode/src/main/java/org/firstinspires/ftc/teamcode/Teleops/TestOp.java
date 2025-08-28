@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-//@Config       //if you want config
-//@TeleOp       //if this is a teleop
-@Autonomous   //if this is an auto
 public class TestOp extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
