@@ -1,35 +1,40 @@
-
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.hardware.Servo;
 
+
+@Config
 public class Shooter {
 
+    public static double TARGET_RPM = 50; // change this live from the dashboard
+double gearRatio = 20.0/16;
     DcMotorEx shooter1;
     DcMotorEx shooter2;
-    boolean running = false;
 
-    // Tune this to your desired RPM
-    private static final double TARGET_RPM = 10 ; // change this!
-    private static final double TARGET_DEG_PER_SEC = TARGET_RPM * 6.0; // RPM * 360/60
+    Servo myServo;
+
+    boolean running = false;
 
     public Shooter(HardwareMap hardwareMap) {
         shooter1 = hardwareMap.get(DcMotorEx.class, "shooter1");
         shooter2 = hardwareMap.get(DcMotorEx.class, "shooter2");
 
-        // Reset and set to velocity control mode
         shooter1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter1.setDirection(DcMotor.Direction.REVERSE);
 
-        // Optional: set zero power behavior
         shooter1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        myServo =  hardwareMap.get(Servo.class, "myServo");
     }
 
     public void toggleMotor() {
@@ -38,9 +43,16 @@ public class Shooter {
             shooter2.setVelocity(0);
             running = false;
         } else {
-            shooter1.setVelocity(TARGET_DEG_PER_SEC, AngleUnit.DEGREES);
-            shooter2.setVelocity(TARGET_DEG_PER_SEC, AngleUnit.DEGREES);
+            double targetDegPerSec = TARGET_RPM * 6.0 * gearRatio; // reads latest value from dashboard
+            shooter1.setVelocity(targetDegPerSec, AngleUnit.DEGREES);
+            shooter2.setVelocity(targetDegPerSec, AngleUnit.DEGREES);
             running = true;
         }
+    }
+    public void servopos1() {
+        myServo.setPosition(0.0);
+    }
+    public void servopos2() {
+        myServo.setPosition(0.5);
     }
 }

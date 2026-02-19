@@ -36,12 +36,12 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-
 /*
  * This file includes a teleop (driver-controlled) file for the goBILDA® StarterBot for the
  * 2025-2026 FIRST® Tech Challenge season DECODE™. It leverages a differential/Skid-Steer
@@ -75,8 +75,11 @@ public class TeleOp extends OpMode {
 
     // Declare OpMode members.
     MecanumDriveTrain myDriveTrain;
-    Shooter myShooter;
+    private Shooter myShooter;
     GamepadEx g1;
+
+
+
 
 
     ElapsedTime feederTimer = new ElapsedTime();
@@ -142,9 +145,17 @@ public class TeleOp extends OpMode {
         g1.readButtons();
         if (g1.wasJustPressed(GamepadKeys.Button.B)){
             myShooter.toggleMotor();
-        }
-        if (g1.wasJustPressed(GamepadKeys.Button.X)){
 
+        }else{
+
+        }
+
+
+        if (g1.wasJustPressed(GamepadKeys.Button.X)){
+            myShooter.servopos2();
+        }
+        else {
+            myShooter.servopos1();
         }
         /*
          * Here we call a function called arcadeDrive. The arcadeDrive function takes the input from
